@@ -1,9 +1,11 @@
 package com.github.grishberg.asyncrv.common;
 
+import android.support.annotation.MainThread;
+import android.support.annotation.Nullable;
+
 import javax.inject.Provider;
 
-import androidx.annotation.Nullable;
-
+@MainThread
 public abstract class LazyProvider<T> implements Provider<T> {
     @Nullable
     private T value;

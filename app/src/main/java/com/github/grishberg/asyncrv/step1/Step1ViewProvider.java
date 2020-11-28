@@ -1,8 +1,8 @@
 package com.github.grishberg.asyncrv.step1;
 
-import com.github.grishberg.asyncviewbuilder.ViewProvider;
+import android.support.v7.widget.RecyclerView;
 
-import androidx.recyclerview.widget.RecyclerView;
+import com.github.grishberg.asyncviewbuilder.ViewProvider;
 
 public class Step1ViewProvider implements ViewProvider<RecyclerView> {
     @Override
