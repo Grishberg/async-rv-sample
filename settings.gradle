@@ -1,0 +1,3 @@
+include ':asyncviewbuilder'
+include ':app'
+rootProject.name = "app-async-rv"
