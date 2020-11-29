@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.github.grishberg.asyncrv.R;
 import com.github.grishberg.asyncviewbuilder.ReplaceableBaseContextWrapper;
 import com.github.grishberg.asyncviewbuilder.ViewProvider;
 
@@ -53,8 +54,7 @@ public class Step1ViewProvider implements ViewProvider<RecyclerView> {
     private class PrepareRecyclerViewTask implements Callable<RecyclerView> {
         @Override
         public RecyclerView call() throws Exception {
-            final RecyclerView rv = new RecyclerView(contextWrapper);
-            rv.setBackgroundColor(Color.GRAY);
+            final HorizontalItemRv rv = new HorizontalItemRv(contextWrapper, null, R.style.RecyclerView);
             rv.setLayoutParams(new ViewGroup.LayoutParams(
                     AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
 
