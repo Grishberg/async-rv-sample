@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.github.grishberg.asyncrv.R;
+import com.github.grishberg.asyncviewbuilder.DimensionProvider;
 import com.github.grishberg.asyncviewbuilder.ReplaceableBaseContextWrapper;
 import com.github.grishberg.asyncviewbuilder.ViewHolderProvider;
 import com.github.grishberg.asyncviewbuilder.ViewProvider;
@@ -29,14 +30,17 @@ public class Step1ViewProvider implements ViewProvider<RecyclerView> {
     private final ReplaceableBaseContextWrapper contextWrapper;
     private final Future<RecyclerView> viewFuture;
     private final List<Item> items;
+    private final DimensionProvider viewDimensionProvider;
 
     public Step1ViewProvider(Application appContext,
                              ExecutorService executor,
-                             List<Item> items) {
+                             List<Item> items,
+                             DimensionProvider viewDimensionProvider) {
         this.appContext = appContext;
         contextWrapper = new ReplaceableBaseContextWrapper(appContext);
         viewFuture = executor.submit(new PrepareRecyclerViewTask());
         this.items = items;
+        this.viewDimensionProvider = viewDimensionProvider;
     }
 
     @MainThread
@@ -80,8 +84,11 @@ public class Step1ViewProvider implements ViewProvider<RecyclerView> {
             return rv;
         }
 
-        private void measureView(RecyclerView rv) {
-
+        private void measureView(HorizontalItemRv v) {
+            v.measure(
+                    View.MeasureSpec.makeMeasureSpec(viewDimensionProvider.getWidth(), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(viewDimensionProvider.getHeight(), View.MeasureSpec.EXACTLY));
+            v.performLayout(true, 0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
         }
     }
 
