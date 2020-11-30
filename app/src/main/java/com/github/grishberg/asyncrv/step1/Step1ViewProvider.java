@@ -2,16 +2,20 @@ package com.github.grishberg.asyncrv.step1;
 
 import android.app.Activity;
 import android.app.Application;
-import android.graphics.Color;
 import android.support.annotation.MainThread;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.github.grishberg.asyncrv.R;
 import com.github.grishberg.asyncviewbuilder.ReplaceableBaseContextWrapper;
+import com.github.grishberg.asyncviewbuilder.ViewHolderProvider;
 import com.github.grishberg.asyncviewbuilder.ViewProvider;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -24,11 +28,15 @@ public class Step1ViewProvider implements ViewProvider<RecyclerView> {
     private final Application appContext;
     private final ReplaceableBaseContextWrapper contextWrapper;
     private final Future<RecyclerView> viewFuture;
+    private final List<Item> items;
 
-    public Step1ViewProvider(Application appContext, ExecutorService executor) {
+    public Step1ViewProvider(Application appContext,
+                             ExecutorService executor,
+                             List<Item> items) {
         this.appContext = appContext;
         contextWrapper = new ReplaceableBaseContextWrapper(appContext);
         viewFuture = executor.submit(new PrepareRecyclerViewTask());
+        this.items = items;
     }
 
     @MainThread
@@ -58,12 +66,36 @@ public class Step1ViewProvider implements ViewProvider<RecyclerView> {
             rv.setLayoutParams(new ViewGroup.LayoutParams(
                     AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
 
+            rv.setLayoutManager(new LinearLayoutManager(contextWrapper,
+                    LinearLayoutManager.HORIZONTAL, false));
+
+            if (!items.isEmpty()) {
+                ViewHolderProviderImpl viewHolderProvider =
+                        new ViewHolderProviderImpl(LayoutInflater.from(contextWrapper));
+                Step1ItemsAdapter adapter = new Step1ItemsAdapter(viewHolderProvider);
+                rv.setAdapter(adapter);
+                adapter.populate(items);
+            }
             measureView(rv);
             return rv;
         }
 
         private void measureView(RecyclerView rv) {
 
+        }
+    }
+
+    private class ViewHolderProviderImpl implements ViewHolderProvider<ItemsViewHolder> {
+        private final LayoutInflater inflater;
+
+        private ViewHolderProviderImpl(LayoutInflater inflater) {
+            this.inflater = inflater;
+        }
+
+        @Override
+        public ItemsViewHolder getViewHolder(ViewGroup parent, int viewType) {
+            View view = inflater.inflate(R.layout.step_1_item_layout, null, false);
+            return new Step1ItemsViewHolder(view);
         }
     }
 }

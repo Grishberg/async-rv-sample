@@ -4,9 +4,11 @@ import android.app.Application;
 import android.support.annotation.MainThread;
 import android.support.v7.widget.RecyclerView;
 
+import com.github.grishberg.asyncrv.step1.Item;
 import com.github.grishberg.asyncrv.step1.Step1ViewProvider;
 import com.github.grishberg.asyncviewbuilder.ViewProvider;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,7 +26,15 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sStep1ViewProvider = new Step1ViewProvider(this, createExecutorService());
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(new Item("item 1", R.drawable.icon));
+        items.add(new Item("item 2", R.drawable.icon));
+        items.add(new Item("item 3", R.drawable.icon));
+        items.add(new Item("item 4", R.drawable.icon));
+        items.add(new Item("item 5", R.drawable.icon));
+        items.add(new Item("item 6", R.drawable.icon));
+        items.add(new Item("item 7", R.drawable.icon));
+        sStep1ViewProvider = new Step1ViewProvider(this, createExecutorService(), items);
     }
 
     private ExecutorService createExecutorService() {

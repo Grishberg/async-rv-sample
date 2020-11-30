@@ -1,13 +1,14 @@
 package com.github.grishberg.asyncrv.step1;
 
-import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 
-class Item {
+public class Item {
     final String text;
-    final Drawable icon;
+    @DrawableRes
+    final int iconRes;
 
-    public Item(String text, Drawable icon) {
+    public Item(String text, @DrawableRes int iconRes) {
         this.text = text;
-        this.icon = icon;
+        this.iconRes = iconRes;
     }
 }
